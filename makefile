@@ -20,9 +20,14 @@ OUTPUT=directfb.so
 $(OUTPUT): $(SRC) 
 	$(CC) $(CFLAGS) $(SRC) $(LDFLAGS) -o $@ 
 
-.gen.stamp: gendfb-lua.pl dir
+.gen.stamp: gendfb-lua.pl dir src/compat.c src/compat.h
 	cat $(DFB_HEADER) | ./gendfb-lua.pl || exit 1
 	touch .gen.stamp
+
+src/compat.c : compat.c
+	cp $< $@
+src/compat.h : compat.h
+	cp $< $@
 
 tags: $(SRC_DIR)* $(DFB_HEADER)
 	ctags $(SRC_DIR)* $(DFB_HEADER)
